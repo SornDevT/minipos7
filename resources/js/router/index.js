@@ -1,5 +1,8 @@
 import { createWebHistory, createRouter } from "vue-router"
 
+import { useStorage } from "vue3-storage"
+const storage = useStorage()
+
 import Store from "../pages/Store.vue"
 import Report from "../pages/Report.vue"
 import Pos from "../pages/Pos.vue"
@@ -47,6 +50,30 @@ const router = createRouter({
     scrollBehavior(){
         window.scrollTo(0,0)
     }
+})
+
+router.beforeEach((to, from, next)=>{
+
+    if(to.path=="/register"){
+        next()
+    } else {
+        if(to.path!="/login" && !storage.getStorageSync("vue-isLoggin") && !window.Laravel.isLoggin){
+            next({
+                path:"/login",
+                replace: true
+            })
+        } else {
+            if(to.path=="/login" && storage.getStorageSync("vue-isLoggin") && window.Laravel.isLoggin){
+                next({
+                    path:"/store",
+                    replace: true
+                })
+            } else {
+                next()
+            }
+        }
+    }
+
 })
 
 export default router
