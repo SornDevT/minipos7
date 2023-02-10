@@ -91,10 +91,7 @@ export default {
       login(){
 
 
-        this.$axios.post("api/login",{
-                        email: this.email,
-                        password: this.password
-                    }).then((response)=>{
+        this.$axios.post("api/login",{email: this.email,password: this.password}).then((response)=>{
 
                         if(response.data.success){
                           this.show_error = false;
@@ -105,7 +102,9 @@ export default {
 
                           this.$storage.setStorageSync("vue-isLoggin",true);
 
-                          window.location.href = "/store"
+                          // window.location.href = "/store"
+
+                          window.location.reload();
 
 
                           

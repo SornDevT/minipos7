@@ -54,6 +54,9 @@ const router = createRouter({
 
 router.beforeEach((to, from, next)=>{
 
+    console.log(storage.getStorageSync("vue-isLoggin"))
+    console.log(window.Laravel.isLoggin)
+
     if(to.path=="/register"){
         next()
     } else {
