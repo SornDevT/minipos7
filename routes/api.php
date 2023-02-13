@@ -24,8 +24,10 @@ Route::post("register",[UserController::class,"register"]);
 Route::post("login",[UserController::class,"login"]);
 Route::post("logout",[UserController::class,"logout"]);
 
-Route::group(['prefix'=>'store'], function(){
+Route::group(['prefix'=>'store','middleware'=>'auth:sanctum'], function(){
     Route::get("/",[StoreController::class,"index"]);
     Route::get("/edit/{id}",[StoreController::class,"edit"]);
     Route::post("add",[StoreController::class,"add"]);
+    Route::post("update/{id}",[StoreController::class,"update"]);
+    Route::delete("delete/{id}",[StoreController::class,"delete"]);
 });
