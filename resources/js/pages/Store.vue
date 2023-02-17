@@ -18,6 +18,11 @@
 
     <div class="row" v-if="FormShow">
       <div class="col-md-4 text-center">
+        <div style="position: relative;" >
+          <button type="button" class="btn rounded-pill btn-icon btn-danger bt-rm" @click="remove_image()" v-if="image_Product" >
+                 <i class='bx bx-x-circle fs-2'></i>
+              </button>
+        </div>
         <img :src="imagePreview" style=" width: 80%;" alt="" srcset="">
         <input type="file" class=" form-control mt-2" @change="onSelected">
       </div>
@@ -157,6 +162,10 @@ export default {
           }
     },
     methods: {
+      remove_image(){
+        this.imagePreview = window.location.origin+'/assets/img/file-upload.png'
+        this.image_Product = ''
+      },
       onSelected(envet){
           // console.log(envet.target.files[0])
           this.image_Product = envet.target.files[0]
@@ -205,10 +214,11 @@ export default {
               formDataStore.append("amount", this.FormStore.amount);
               formDataStore.append("price_buy", this.FormStore.price_buy);
               formDataStore.append("price_sell", this.FormStore.price_sell);
+              formDataStore.append("file", this.image_Product);
               // formDataStore.append("id", this.EditID);
 
               this.$axios.get("/sanctum/csrf-cookie").then((response)=>{
-                  this.$axios.post(`api/store/update/${this.EditID}`, formDataStore).then((response)=>{
+                  this.$axios.post(`api/store/update/${this.EditID}`, formDataStore,{headers:{"content-type":"multipart/form-data"}}).then((response)=>{
 
                     if(response.data.success){
                         this.$swal.fire({
@@ -303,19 +313,28 @@ export default {
             //ເກັບ id ໄວ້ອັບເດດຂໍ້ມູນ
               this.EditID = id
               this.$axios.get("/sanctum/csrf-cookie").then((response)=>{
-              this.$axios.get(`api/store/edit/${id}`).then((response)=>{
+                this.$axios.get(`api/store/edit/${id}`).then((response)=>{
 
-              this.FormStore.name = response.data.name
-              this.FormStore.amount = response.data.amount
-              this.FormStore.price_buy = response.data.price_buy
-              this.FormStore.price_sell = response.data.price_sell
+                this.FormStore.name = response.data.name
+                this.FormStore.amount = response.data.amount
+                this.FormStore.price_buy = response.data.price_buy
+                this.FormStore.price_sell = response.data.price_sell
 
-                  console.log(response.data)
-                  this.FormShow = true
-              
-              }).catch((error)=>{
-                console.log(error)
-              })
+                // ນຳຮູບພາບມາເກັບໄວ້
+                this.image_Product = response.data.image
+                  // ສະແດງຮູບພາບ
+                if(response.data.image){
+                  this.imagePreview = window.location.origin+'/assets/img/'+response.data.image
+                } else {
+                  this.imagePreview = window.location.origin+'/assets/img/file-upload.png'
+                }
+
+                    // console.log(response.data)
+                    this.FormShow = true
+                
+                }).catch((error)=>{
+                  console.log(error)
+                })
             })
 
         },
@@ -435,5 +454,9 @@ export default {
       height: 80px;
       object-fit: cover;
       object-position: center;
+    }
+
+    .bt-rm{
+      position: absolute;right: 30px;top: 5px;
     }
 </style>
