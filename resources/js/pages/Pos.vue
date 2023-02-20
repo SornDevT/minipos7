@@ -16,7 +16,12 @@
                                <div class="num-img" v-if="list.id == i.id">{{i.order_amount}}</div>
                             </span>
                             
-                        <img class="card-img-top img-cover" src="assets/img/elements/18.jpg" alt="Card image cap">
+                        <!-- <img class="card-img-top img-cover" src="assets/img/elements/18.jpg" alt="Card image cap">
+                        <img class="card-img-top img-cover" src="assets/img/elements/18.jpg" alt="Card image cap"> -->
+
+                        <img :src="'assets/img/'+list.image" alt="" class="card-img-top img-cover" v-if="list.image"> 
+                        <img :src="'assets/img/no-img.png'" alt="" class="card-img-top img-cover" v-if="!list.image"> 
+
                         <div class="card-body p-1 text-center">
                             <strong>{{list.name}}</strong>
                             <p class="card-text">
@@ -33,14 +38,25 @@
             <div class="col-md-4"> 
                 <div class="card" style="height: 80vh; overflow: auto;">
                     <div class="card-body p-3">
+                        <div class="row">
+                                <div class="col-md-12">
+                                    <label for="">ຊື່ລູກຄ້າ</label>
+                                    <input type="text" class=" form-control" v-model="customer_name">
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="">ເບີໂທ</label>
+                                    <input type="text" class=" form-control" v-model="customer_tel">
+                                </div>
+                        </div>
+                        <hr>
                         <div class=" d-flex justify-content-between fs-4 text-primary ">
                             
                                 <span><strong> ລວມຍອດເງິນ:</strong></span>
-                                <span><strong>{{ formatPrice(TotalAmount) }}</strong></span>
+                                <span><strong>{{ formatPrice(TotalAmount) }} ກີບ</strong></span>
                            
                         </div>
                         
-                            <button type="button" class="btn rounded-pill btn-info mt-2" :disabled="!TotalAmount" style="width:100%">ຊຳລະເງິນ</button>
+                            <button type="button" class="btn rounded-pill btn-info mt-2" :disabled="!TotalAmount" style="width:100%" @click="Confirm_to_pay()">ຊຳລະເງິນ</button>
                        
                         
                                 <div class="table-responsive text-nowrap mt-4 border">
@@ -68,6 +84,96 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="confirm_to_pay" tabindex="-1" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalCenterTitle">ຊຳລະສິນຄ້າ</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-6 text-start">
+                        ລວມຍອດເງິນ:
+                    </div>
+                    <div class="col-md-6 text-end">
+                        {{ formatPrice(TotalAmount) }} ກີບ
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 text-start">
+                        ຮັບເງິນນຳລູກຄ້າ:
+                    </div>
+                    <div class="col-md-6 text-end">
+                     {{formatPrice(CashAmount)}} ກີບ
+                    </div>
+                  </div>
+                  <div class="row text-danger" v-if="CashAmount-TotalAmount>0">
+                    <div class="col-md-6 text-start">
+                        ເງິນທອນ:
+                    </div>
+                    <div class="col-md-6 text-end">
+                     {{formatPrice(CashAmount-TotalAmount)}} ກີບ
+                    </div>
+                  </div>
+                  <div class="row d-flex justify-content-end">
+                        <div class="col-md-5">
+                            <input type="number" class=" form-control" style="text-align: right;" v-model="CashAmount">
+                        </div>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                  <div class="row" style="width: 250px;">
+                        <div class="col-4 mt-2">
+                            <button type="button" style="width: 60px;" class="btn btn-primary" @click="AddNum(1)" >1</button>
+                        </div>
+                        <div class="col-4 mt-2">
+                            <button type="button" style="width: 60px;" class="btn btn-primary" @click="AddNum(2)" >2</button>
+                        </div>
+                        <div class="col-4 mt-2">
+                            <button type="button" style="width: 60px;" class="btn btn-primary" @click="AddNum(3)">3</button>
+                        </div>
+                        <div class="col-4 mt-2">
+                            <button type="button" style="width: 60px;" class="btn btn-primary" @click="AddNum(4)">4</button>
+                        </div>
+                        <div class="col-4 mt-2">
+                            <button type="button" style="width: 60px;" class="btn btn-primary" @click="AddNum(5)">5</button>
+                        </div>
+                        <div class="col-4 mt-2">
+                            <button type="button" style="width: 60px;" class="btn btn-primary" @click="AddNum(6)">6</button>
+                        </div>
+                        <div class="col-4 mt-2">
+                            <button type="button" style="width: 60px;" class="btn btn-primary" @click="AddNum(7)">7</button>
+                        </div>
+                        <div class="col-4 mt-2">
+                            <button type="button" style="width: 60px;" class="btn btn-primary" @click="AddNum(8)">8</button>
+                        </div>
+                        <div class="col-4 mt-2">
+                            <button type="button" style="width: 60px;" class="btn btn-primary" @click="AddNum(9)">9</button>
+                        </div>
+                        <div class="col-4 mt-2">
+                            <button type="button" style="width: 60px;" class="btn btn-primary" @click="AddNum('00')">00</button>
+                        </div>
+                        <div class="col-4 mt-2">
+                            <button type="button" style="width: 60px;" class="btn btn-primary" @click="AddNum(0)">0</button>
+                        </div>
+                        <div class="col-4 mt-2" style="width: 60px;">
+                            <button type="button" style="width: 60px;" class="btn btn-danger" @click="AddNum('-')"><i class='bx bx-arrow-back'></i></button>
+                        </div>
+                  </div>
+                </div>
+                <div class="text-center mt-4">
+                    <button type="button" class="btn rounded-pill btn-success" :disabled="!(CashAmount>=TotalAmount)" @click="Pay()">ຍືນຍັນຊຳລະເງິນ</button>
+                </div>
+              
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ປິດ</button>
+    
+                </div>
+              </div>
+            </div>
+          </div>
     </div>
 </template>
 
@@ -80,6 +186,9 @@ export default {
             StoreData:[],
             search:'',
             ListOrder:[],
+            CashAmount:'',
+            customer_name:'',
+            customer_tel:''
         };
     },
 
@@ -93,30 +202,101 @@ export default {
     },
 
     methods: {
+        AddNum(num){
+            if(num == '-'){
+                this.CashAmount = this.CashAmount.slice(0,-1)
+            } else {
+                this.CashAmount = this.CashAmount + num
+            }
+        },
+        Pay(){
+
+            this.$axios.get("/sanctum/csrf-cookie").then((response)=>{
+                  this.$axios.post(`api/transection/add`,{
+                    acc_type:'income',
+                    listorder: this.ListOrder,
+                    customer_name: this.customer_name,
+                    customer_tel: this.customer_tel
+                  }).then((response)=>{
+
+                    if(response.data.success){
+
+                        this.customer_name = ''
+                        this.customer_tel =''
+                        $('#confirm_to_pay').modal('hide')
+                        this.ListOrder = []
+                        this.getStore()
+
+                        window.open(window.location.origin+'/api/bills/print/'+response.data.bills_id, "_blank")
+
+
+                        this.$swal.fire({
+                          toast:true,
+                          position: 'top-end',
+                          icon: 'success',
+                          title: response.data.message,
+                          showConfirmButton: false,
+                          timer: 2500
+                        })
+                        } else {
+
+                        this.$swal.fire({
+                          // position: 'top-end',
+                          icon: 'error',
+                          title: 'ຜິດຜາດ!',
+                          text: response.data.message,
+                          showConfirmButton: false,
+                          timer: 5500
+                        })
+
+                        }
+
+                      // console.log(response.data)
+                  }).catch((error)=>{
+                    console.log(error)
+                  })
+              })
+        },
+        Confirm_to_pay(){
+
+            $('#confirm_to_pay').modal('show')
+        },
         add_product(id){
             
 
             let item = this.StoreData.data.find((i)=>i.id == id)
 
             // console.log(item)
+            // ກວດຈຳນວນສິນຄ້າໃນສະຕ໋ອກ
+            if(item.amount>0){
 
-            let list_order = this.ListOrder.find((i)=>i.id==id)
+                    let list_order = this.ListOrder.find((i)=>i.id==id)
 
-            if(list_order){
-                // console.log(list_order)
+                    if(list_order){
+                        // console.log(list_order)
 
-                // ເພີ່ມຈຳນວນຂື້ນ 1
-                list_order.order_amount++
+                        let old_order = list_order.order_amount
 
-            } else {
-                this.ListOrder.push({
-                id: item.id,
-                name:item.name,
-                price_sell: item.price_sell,
-                order_amount: 1
-            })
-            }
+                        if(item.amount - old_order>0){
+                            // ເພີ່ມຈຳນວນຂື້ນ 1
+                            list_order.order_amount++
+                        } else {
+                            this.$swal('ສິນຄ້ານີ້','ໝົດແລ້ວ','error')
+                        }
 
+                        
+
+                    } else {
+                        this.ListOrder.push({
+                        id: item.id,
+                        name:item.name,
+                        price_sell: item.price_sell,
+                        order_amount: 1
+                    })
+                    }
+                } else {
+                    this.$swal('ສິນຄ້ານີ້','ໝົດແລ້ວ','error')
+                }
         },
         remov_product(id){
 
