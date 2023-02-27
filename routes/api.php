@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\TransectionController;
 use App\Http\Controllers\BillsController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +36,7 @@ Route::group(['prefix'=>'store','middleware'=>'auth:sanctum'], function(){
 });
 
 Route::group(['prefix'=>'transection','middleware'=>'auth:sanctum'], function(){
-    // Route::get("/",[TransectionController::class,"index"]);
+    Route::post("/",[TransectionController::class,"index"]);
     // Route::get("/edit/{id}",[TransectionController::class,"edit"]);
     Route::post("add",[TransectionController::class,"add"]);
     // Route::post("update/{id}",[TransectionController::class,"update"]);
@@ -44,4 +45,8 @@ Route::group(['prefix'=>'transection','middleware'=>'auth:sanctum'], function(){
 
 Route::group(['prefix'=>'bills'], function(){
     Route::get("print/{id}",[BillsController::class,"print"]);
+});
+
+Route::group(['prefix'=>'report'], function(){
+    Route::post("/",[ReportController::class,"create_report"]);
 });
