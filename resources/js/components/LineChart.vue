@@ -19,13 +19,13 @@ export default defineComponent({
     }
   },
   mounted () {
-    this.renderChart(this.chartOption, this.chartData);
+    this.renderChart(this.chartData, this.chartOption);
   },
   watch:{
     update:{
         handle: function(){
             this._chart.destroy();
-            this.renderChart(this.chartOption, this.chartData);
+            this.renderChart(this.chartData,this.chartOption,);
         }
     }
   }
