@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class=" d-flex justify-content-between ">
-                <h5 class="card-header">ສະຕ໋ອກສິນຄ້າ</h5>
+                <h5 class="card-header text-primary ">ລາຍການ ສະຕ໋ອກສິນຄ້າ</h5>
                 <div class=" me-4 pt-3 "> 
                   <!-- {{ check_butom }} -->
             
