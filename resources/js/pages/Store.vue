@@ -194,6 +194,15 @@ export default {
       },
         add_store(){
 
+          /// ເຄຼຍຂໍ້ມູນຟອມ ເພີ່ມສິນຄ້າໃໝ່
+            this.FormStore.name = ''
+            this.FormStore.amount = ''
+            this.FormStore.price_buy = ''
+            this.FormStore.price_sell = ''
+
+            this.imagePreview = window.location.origin+'/assets/img/file-upload.png'
+            this.image_Product = ''
+          /// ເປີດຟອມ
             this.FormShow = true
 
         },
